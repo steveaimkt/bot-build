@@ -46,154 +46,103 @@ description: |
 🤖 나만의 봇 구축을 시작합니다.
 
 지금 상태:
-  ✅ Discord ↔ Claude 양방향 연결 (--channels 세션 가동 중인지 자동 점검)
+  ✅ Discord ↔ Claude 양방향 연결 (--channels 세션 자동 점검)
   ✅ access 정책 잠금 (allowlist · 본인만)
-  ⚙️ 다음 단계 = 비서 페르소나 + 업무 + 권한 결정
+  ⚙️ 다음 단계 = 비서 페르소나 + 업무 + 권한 + 채널 결정
 
-총 4 질문 · 약 15분 (Q4 는 선택 · 자동 진단 포함).
+═══════════════════════════════════════════════════════════════
+📚 본 스킬 전체 구조 (한눈에 · 5 PHASE · 5~15분)
+═══════════════════════════════════════════════════════════════
 
-5단계 흐름 (총 20~30분 · 프리셋 선택 시 10분):
+┌──────────────────────────────────────────────────────────────┐
+│  📋 PHASE 1 · 봇 기획    인벤토리 자동 스캔                   │
+│  💡 PHASE 2 · 봇 제안    프리셋 8 + 자유 설계 Z              │
+│  🔌 PHASE 3 · MCP 안내   매트릭스 + 권한 매핑                │
+│  ⚙️ PHASE 4 · 봇 설치    settings · launchd · cron 자동      │
+│  📡 PHASE 5 · 채널 연동  디스코드 + 첫 가동 검증             │
+└──────────────────────────────────────────────────────────────┘
 
-  📋 PHASE 1 · 봇 기획 (Plan)
-     사전 점검 + 인벤토리 자동 스캔 (봇·에이전트·MCP·스킬)
+📦 프리셋 라인업 (PHASE 2 에서 1개 선택):
 
-  💡 PHASE 2 · 봇 제안 (Propose)
-     [기본 3개 · 모든 사용자]
-     A. 📅 일정·메일 매니저 (가장 기본 · 추천 ⭐)
-     B. 📊 마케팅 매니저 (광고·매출 운용)
-     C. ✍️ 콘텐츠 매니저 (트렌드·뉴스레터·SNS)
+  [기본 3개 · 모든 사용자]              [고도화 5개 · Part 3~8 자산]
+  A. 📅 일정·메일 매니저 ⭐ 추천         D. 🔬 리서치 인텔리전스 (Part 4)
+  B. 📊 마케팅 매니저                   E. 📝 콘텐츠 파이프라인 (Part 3+5)
+  C. ✍️ 콘텐츠 매니저                   F. 💰 광고 옵스 (Part 6)
+                                        G. 📊 GA4 데이터 분석 (Part 7)
+                                        H. 🎯 CRM 리텐션 (Part 8)
+  [자유 설계]
+  Z. 🎨 Q1~Q4 직접 답변
 
-     [고도화 5개 · marketing-os Part 3~8 자산 활용]
-     D. 🔬 리서치 인텔리전스 (Part 4 · 시장·경쟁사·트렌드)
-     E. 📝 콘텐츠 파이프라인 (Part 3+5 · 캘린더·뉴스레터·카피·디자인)
-     F. 💰 광고 옵스 (Part 6 · 3매체 통합·A/B·임계치)
-     G. 📊 GA4 데이터 분석 (Part 7 · 트래픽·전환·HTML 리포트)
-     H. 🎯 CRM 리텐션 (Part 8 · CS·LTV·이탈)
+📝 자동 박제 산출물 5종:
+  ① my-bot-spec.md       (페르소나·에이전트·정책·라우팅)
+  ② OPERATIONS.md        (발화 매뉴얼 15~20개 + 응급 명령)
+  ③ AI-비서-아키텍처.md  (시스템 7 도메인 팀 매트릭스 · 옵션)
+  ④ settings.json 패치   (권한 자동/승인/금지)
+  ⑤ launchd plist        (매일·매주 자동화 · macOS · Windows 분기)
 
-     [자유 설계]
-     Z. 🎨 직접 답변 (Q1~Q4 인터뷰 · 15분)
+⭐ 공통 기본 기능: 매일 아침 07:00 알림 (모든 프리셋 기본 탑재)
 
-     ⭐ 공통 기본 기능: 매일 아침 07:00 알림 (모든 프리셋 기본 탑재)
+소요 시간:
+  - 프리셋 선택 (A~H)   : 약 5~10분
+  - 자유 설계 (Z)       : 약 15분 (Q1~Q4 직접 답변)
 
-  🔌 PHASE 3 · MCP & 기능 안내 (Inform)
-     선택된 봇의 필요 MCP 매트릭스 + 미설치 MCP 안내 + 도구별 권한 매핑
+═══════════════════════════════════════════════════════════════
 
-  ⚙️ PHASE 4 · 봇 설치 (Install)
-     • my-bot-spec.md · OPERATIONS.md · 아키텍처.md 박제
-     • CLAUDE.md 라우팅 패치 + .claude/settings.json 권한 패치
-     • launchd plist 자동 등록 (매일·매주 자동화)
-     • cron 등록 (즉시 알림 폴링)
-
-  📡 PHASE 5 · 디스코드 채널 연동 (Connect)
-     • 필요 채널 목록 안내 + 생성 가이드
-     • access.json 의 groups 자동 패치 (채널 ID)
-     • 첫 가동 검증 (폰 DM + 채널 멘션)
-     • 사용 시작 안내 (OPERATIONS.md)
-
-시작할까요? (y / n)
+시작할까요? (y / n / 더 자세히)
 ```
 
 사용자 `y` → STEP 0 진행.
 
 ---
 
-## STEP 0 · 최초 셋업 + 사전 점검 (자동 30초)
+## STEP 0 · Discord ↔ Claude 양방향 연결 점검 (자동 5초) ⭐
 
-⭐ **본 STEP 은 구 `bot-build-install` 역할 통합** — 첫 호출 시 자동으로 OS 감지 · 환경변수 등록 · 선행 점검까지 처리. 이미 셋업된 사용자는 자동 통과.
+본 스킬은 **디스코드 봇이 이미 살아있는 상태에서 호출** 되는 후속 스킬.
+시작 전 가장 중요한 **양방향 연결** 부터 점검합니다.
 
-### 0-1. OS 자동 감지
-
-```bash
-uname -s 2>/dev/null || echo "Windows"
-```
-
-- `Darwin` → macOS · `Linux` → Linux · `Windows/MINGW*/CYGWIN*` → Windows (PowerShell)
-
-### 0-2. `MARKETING_OS` 환경변수 자동 등록 (1회만)
+### 양방향 연결 점검 4가지
 
 ```bash
-# 환경변수 없으면 자동 탐지·등록
-if [ -z "$MARKETING_OS" ]; then
-  CANDIDATES=(
-    "$HOME/marketing-os"
-    "$HOME/Desktop/marketing-os"
-    "$HOME/Documents/marketing-os"
-    "$HOME/Library/Mobile Documents/com~apple~CloudDocs/Desktop/0.마케터를 위한 클로드코드/marketing-os"
-    "$HOME/dev/marketing-os"
-  )
-  for path in "${CANDIDATES[@]}"; do
-    if [ -f "$path/curriculum/part02-MCP12개/11-discord/bot-build/SKILL.md" ]; then
-      MARKETING_OS="$path"
-      # .zshrc / .bash_profile 영구 등록
-      SHELL_RC="$HOME/.zshrc"
-      [ -f "$HOME/.bash_profile" ] && SHELL_RC="$HOME/.bash_profile"
-      if ! grep -q "export MARKETING_OS=" "$SHELL_RC"; then
-        echo "export MARKETING_OS=\"$MARKETING_OS\"" >> "$SHELL_RC"
-      fi
-      break
-    fi
-  done
-fi
-echo "MARKETING_OS=$MARKETING_OS"
-```
+# 1. 봇 토큰 존재 (.env)
+ls ~/.claude/channels/discord/.env 2>/dev/null && echo "✅ 토큰 OK"
 
-자동 탐지 실패 시 사용자에게 묻기 :
-```
-질문 · marketing-os 폴더 위치를 알려주세요.
-(예: /Users/홍길동/Desktop/marketing-os)
-
-답변 :
-```
-
-**Windows (PowerShell) 분기** :
-```powershell
-if (-not $env:MARKETING_OS) {
-  # 자동 탐지 + [Environment]::SetEnvironmentVariable("MARKETING_OS", $path, "User")
-}
-```
-
-### 0-3. Claude Code · Discord Channels · MCP 동시 점검
-
-```bash
-# 1. Claude Code 버전 (v2.1.80+)
-claude --version
-
-# 2. Discord Channels 봇 활성
-ls ~/.claude/channels/discord/.env 2>/dev/null
+# 2. access 정책 (allowlist 권장)
 cat ~/.claude/channels/discord/access.json 2>/dev/null | grep dmPolicy
+
+# 3. --channels 세션 살아있는지 (PID 확인)
 ps aux | grep "claude --channels" | grep -v grep
 
-# 3. 핵심 MCP prefix 노출 체크
-#   mcp__claude_ai_Gmail__* · mcp__claude_ai_Google_Calendar__*
-#   mcp__claude_ai_Notion__* · mcp__ga4__* · mcp__meta-ads__*
-#   mcp__google-ads__* · mcp__google-sheets__* · mcp__youtube-data__*
-#   mcp__buffer__* · mcp__firecrawl__*
+# 4. ⭐ 양방향 도구 5개 시스템 노출 여부 — 핵심
+#    mcp__plugin_discord_discord__reply
+#    mcp__plugin_discord_discord__react
+#    mcp__plugin_discord_discord__edit_message
+#    mcp__plugin_discord_discord__fetch_messages
+#    mcp__plugin_discord_discord__download_attachment
 ```
 
-### 0-4. 종합 게이트
+💡 **4번이 진짜 양방향 연결의 증거** — 도구 5개가 모두 노출되어야 폰 DM → 봇 응답이 가능.
+
+### 점검 게이트
 
 ```
-사전 점검 결과:
-  ✅ OS                       : macOS / Windows / Linux
-  ✅ MARKETING_OS 환경변수     : {경로} (영구 등록 완료)
-  ✅ Claude Code              : v2.1.123
-  ✅ Discord Channels 봇       : marketing-ch (allowlist · 가동 중)
-  ✅ 활성 MCP                  : N 종
+Discord ↔ Claude 양방향 연결 점검:
 
-모두 OK → STEP 0.5 인벤토리 스캔 진행 (y)
-⚠️ Discord 셋업 부족 → 먼저 `discord-channels-setup` 스킬 호출 (n)
-⚠️ MCP 부족 → `mcp설치` 또는 `mcp설치-전체` 스킬 호출 안내 (m)
+  ✅ 봇 토큰 (.env)              : OK
+  ✅ access 정책                  : allowlist (본인만)
+  ✅ --channels 세션              : 가동 중 (PID xxxxx)
+  ✅ 양방향 도구 5개 노출         : reply · react · edit_message · fetch_messages · download_attachment
+  ✅ 활성 MCP (Gmail/Calendar 등) : N 종
+
+→ Discord ↔ Claude 양방향 연결 정상 ✅
+   STEP 0.5 인벤토리 스캔 진행할까요? (y)
+
+❌ 양방향 끊김 발견 시:
+   - 토큰 없음     → "디스코드 채널 설치" 호출 (discord-channels-setup)
+   - 세션 죽음     → 새 터미널에서 `claude --channels plugin:discord@claude-plugins-official` 재시작
+   - 도구 미노출  → 위 명령으로 새 세션 가동 후 본 스킬 재호출
 ```
 
-> 💡 **교육생 진입 시** : 강의 폴더 받은 후 다음 한 줄로 본 스킬 활성화 (1회만) :
-> ```bash
-> # macOS/Linux
-> ln -sfn "$(pwd)/curriculum/part02-MCP12개/11-discord/bot-build" ~/.claude/skills/bot-build
->
-> # Windows (관리자 PowerShell)
-> New-Item -ItemType SymbolicLink -Path "$env:USERPROFILE\.claude\skills\bot-build" -Target "$(Get-Location)\curriculum\part02-MCP12개\11-discord\bot-build"
-> ```
-> → Claude Code 재시작 → "나만의 봇 구축을 시작하자" 발화 → 본 STEP 0 자동 셋업 진행
+⚠️ **본인의 봇 (예: marketing-ch) 이 실제로 폰 DM 에 답하는지** 의심된다면 STEP 0.5 진행 전에 폰에서 "hi" 한번 보내 즉답 확인 권장.
 
 ---
 
